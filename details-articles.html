@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pimail Market</title>
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: #e9e4e4;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: linear-gradient(90deg, #4a007e, #6e2c8e);
+      color: #fff;
+      text-align: center;
+      padding: 20px 0;
+      font-family: 'Russo One', sans-serif;
+    }
+    header img {
+      max-width: 170px;
+      margin: 0 auto;
+    }
+    .intro-text {
+      text-align: center;
+      font-size: 1.1em;
+      margin: 20px auto;
+      max-width: 800px;
+      line-height: 1.6;
+      font-weight: 300;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: opacity 1s ease-out, transform 1s ease-out;
+      font-family: 'Roboto', sans-serif;
+    }
+    .product-section {
+      width: 90%;
+      max-width: 1200px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .product-section h2 {
+      text-decoration: underline;
+      text-underline-offset: 5px;
+      text-decoration-color: #6e2c8e;
+      color: black;
+    }
+    .product-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+    .product-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      width: 100%;
+      position: relative;
+    }
+    .product-box {
+      background: #e3f2fd;
+      padding: 10px;
+      border-radius: 10px;
+      text-align: center;
+      cursor: pointer;
+      width: 220px;
+      transition: 0.3s;
+      min-height: 170px;
+    }
+    .product-box:hover {
+      background: #c8e6c9;
+    }
+    .product-box img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    /* Animations */
+    .product-row-left-to-right {
+      animation: slideLeftToRight 22s infinite linear;
+      position: relative;
+    }
+    .product-row-right-to-left {
+      animation: slideRightToLeft 22s infinite linear;
+      position: relative;
+    }
+
+    /* Vitesse réduite pour la ligne 2 et 4 */
+    .product-row-left-to-right.slow {
+      animation: slideLeftToRight 22s infinite linear;
+    }
+    .product-row-right-to-left.slow {
+      animation: slideRightToLeft 22s infinite linear;
+    }
+
+    @keyframes slideLeftToRight {
+      0% {
+        transform: translateX(100%);
+      }
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+
+    @keyframes slideRightToLeft {
+      0% {
+        transform: translateX(-100%);
+      }
+      100% {
+        transform: translateX(100%);
+      }
+    }
+
+    .separator {
+      text-align: center;
+      font-size: 1.5em;
+      margin: 40px auto;
+      font-weight: 300;
+    }
+    .back-button {
+      display: block;
+      width: 200px;
+      margin: 20px auto;
+      padding: 10px;
+      text-align: center;
+      background: linear-gradient(90deg, #00aaff, #005f99);
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.2em;
+      border-radius: 8px;
+      transition: 0.3s;
+      font-weight: 300;
+    }
+    .back-button:hover {
+      background: #004070;
+    }
+    footer {
+      background: linear-gradient(90deg, #4a007e, #6e2c8e);
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+      font-size: 1.1em;
+    }
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #6e2c8e;
+      color: white;
+      border: none;
+      padding: 12px;
+      font-size: 1.5em;
+      border-radius: 50%;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+    .theme-toggle:hover {
+      background-color: #9c4dff;
+      transform: scale(1.1);
+    }
+    .theme-toggle:focus {
+      outline: none;
+    }
+    .horizontal-line {
+      width: 33%;
+      height: 2px;
+      background-color: #6e2c8e;
+      margin: 20px auto;
+    }
+
+    /* Styles pour les sous-textes */
+    .stock-warning, .back-text {
+      text-align: center;
+      font-family: 'Roboto', sans-serif;
+      font-size: 1.1em;
+      margin: 20px auto;
+      max-width: 800px;
+      font-weight: 300;
+      color: #333;
+    }
+
+    .stock-warning br {
+      margin-bottom: 10px;
+    }
+    header img {
+      max-width: 120px;
+      margin: 0 auto;
+    }
+    .product-preview {
+      text-align: center;
+      padding: 20px;
+      font-family: 'Roboto', sans-serif;
+    }
+    .product-preview h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+    .product-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .product-image {
+      width: 100%;
+      max-width: 300px;
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ddd;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      overflow: hidden;
+    }
+    .product-image img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+    .product-details {
+      width: 100%;
+      text-align: center;
+      color: #333;
+    }
+.product-details h3 {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.product-details .rating {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.product-details .rating span {
+    color: #ff9900;
+    font-size: 18px;
+    margin-right: 5px;
+}
+
+.product-details .price {
+    font-size: 22px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.product-details .stock {
+    font-size: 16px;
+    color: green;
+    margin-bottom: 15px;
+}
+
+.product-button {
+    display: block;
+    background-color: #ff8c00;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+    text-align: center;
+    text-decoration: none;
+}
+
+.product-button:hover {
+    background-color: #e67600;
+}
+#product-image {
+    width: 300px; /* Par exemple */
+    height: 300px; /* Par exemple */
+    overflow: hidden; /* Masque l'excédent de l'image si elle dépasse */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ccc; /* Pour mieux voir les limites */
+  }
+  
+  #product-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Assure que l'image est contenue dans la boîte sans la déformer */
+  }  
+
+  </style></head>
+<body>
+  <header>
+    <img src="R.png" alt="PI Logo">
+    <h1>PIMAIL MARKET</h1>
+  </header>
+
+  <p class="intro-text" id="intro">Les produits que vous avez consultés sur la page précédente sont détaillés ici. Nous avons soigneusement sélectionné de nouveaux articles pour enrichir votre expérience d'achat. Laissez-vous inspirer par notre large gamme et trouvez exactement ce qui correspond à vos envies et besoins !</p>
+  
+  <div class="horizontal-line"></div>
+  <div class="product-section">
+    <h2>Nos Produits</h2>
+    <br>
+    <br>
+    <div class="product-grid">
+      <div class="product-row product-row-left-to-right" style="animation-delay: 0s;">
+       
+        <div class="product-box"><img src="ASUS.jfif" alt="PC TUF"></div>
+        <div class="product-box"><img src="DRONE.jfif" alt="DRONE"></div>
+        <div class="product-box"><img src="alien.jfif" alt="PC ALIENWARE"></div>
+        <div class="product-box"><img src="samsung.avif" alt="SAMSUNG S23"></div>
+        <div class="product-box"><img src="souris.webp" alt="SOURIS PULSAR"></div>
+      </div>
+      <div class="product-row product-row-right-to-left slow" style="animation-delay: -3s;">
+        <div class="product-box"><img src="pixel.jpeg" alt=" pixel 8"></div>
+        <div class="product-box"><img src="xbox.png" alt="XBOX series X"></div>
+        <div class="product-box"><img src="tv oled.avif" alt="TV OLED"></div>
+        <div class="product-box"><img src="OIP.jfif" alt="LOOT BOX"></div>
+        <div class="product-box"><img src="jbl.jpg" alt="JBL"></div>
+       
+      </div>
+      <div class="product-row product-row-left-to-right" style="animation-delay: 0s;">
+        <div class="product-box"><img src="iphone155.avif" alt="IPHONE 15"></div>
+        <div class="product-box"><img src="CASQUE.webp" alt="CASQUE APPLE"></div>
+        <div class="product-box"><img src="clavier.jpg" alt="CLAVIER WOTTING"></div>
+        <div class="product-box"><img src="WATCH.jfif" alt="WATCH CRISTY"></div>
+        <div class="product-box"><img src="VIRTUEL.jfif" alt="CASQUE VIRTUEL"></div>
+    
+      </div>
+      <div class="product-row product-row-right-to-left slow" style="animation-delay: -3s;">
+        <div class="product-box"><img src="frigo.jfif" alt="frigo"></div>
+        <div class="product-box"><img src="commander.webp" alt="VOITURES TELECOMMANDER"></div>
+        <div class="product-box"><img src="PS5.jpg" alt="PS5"></div>
+        <div class="product-box"><img src="kit.jpg" alt="KIT "></div>
+        <div class="product-box"><img src="ecran.jpg" alt="ECRAN BENQ"></div>
+      </div>
+     
+    </div>
+    
+  </div>
+  <br>
+  <div class="horizontal-line"></div>
+    
+    <section class="product-preview">
+      <h2>Produit sélectionné</h2>
+      <p class="subtitle">
+          Voici un aperçu détaillé du produit que vous avez sélectionné. Vérifiez ses caractéristiques avant de confirmer votre commande.
+      </p>
+  
+      <div class="product-container">
+          <!-- Image du produit -->
+          <div class="product-image" id="product-image">
+              <p>Aucune image disponible</p>
+          </div>
+  
+        
+          </div>
+      </div>
+  </section>
+  <!-- Détails du produit -->
+          <div class="product-details">
+              <h3 id="product-name">Nom du produit</h3>
+        
+              <p class="stock">En stock</p>
+              
+              <!-- Nouvelle section description -->
+              <p class="product-description" id="product-description">Description du produit...</p>
+  
+              <a href="index.html#order" class="product-button">Valider l'article</a>
+  
+  <br>
+  <div class="horizontal-line"></div>
+
+  <p class="stock-warning">Veuillez noter que certains produits peuvent être en rupture de stock, mais ne vous inquiétez pas, nous ajouterons régulièrement de nouveaux articles pour améliorer la fluidité des commandes et satisfaire votre expérience d'achat.</p>
+
+  <p class="separator">------</p>
+  <a href="index.html" class="back-button">Retour à l'accueil</a>
+  <p class="back-text">Cliquez ici pour revenir à la page précédente et poursuivre votre navigation.</p>
+
+  <footer>
+    <p>&copy; 2025 Pimail Market - Tous droits réservés.</p>
+  </footer>
+
+  <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('intro').style.opacity = 1;
+      document.getElementById('intro').style.transform = 'translateY(0)';
+      
+      if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+      }
+    });
+
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+      if (document.body.classList.contains('dark-mode')) {
+        localStorage.setItem('theme', 'dark');
+      } else {
+        localStorage.setItem('theme', 'light');
+      }
+    }
+  </script>
+<script>
+  // Sélectionne toutes les images de produits
+  const productImages = document.querySelectorAll('.product-box img');
+  
+  // Récupère les éléments de la section de prévisualisation
+  const productImageContainer = document.getElementById('product-image');
+  const productTitle = document.getElementById('product-name');
+  const productDescription = document.getElementById('product-description');
+
+  // Dictionnaire pour les descriptions (à compléter plus tard)
+  const descriptions = {
+    "PC TUF": "✅ Processeur : AMD Ryzen 7 7800H / Intel Core i7 13ᵉ gen  ✅ Carte graphique : NVIDIA GeForce RTX 4060 ✅ RAM16 Go DDR5 (extensible jusqu'à 32 Go)✅ StockageSSD NVMe 512 Go / 1 To 🚀 ✅ Taux de rafraîchissement : 144 Hz,✅ Système d'exploitation : Windows 11 Home / Pro 🏠",
+
+    "DRONE": "📌 Modèle : DJI Air 3 / Autel EVO II / Parrot Anafi USA ,✅ Autonomie : Jusqu'à 1H35 minutes par charge 🔋",
+    "PC ALIENWARE": "📌 Modèle : Alienware m18 / x16 / Aurora R15 ,✅ Carte Graphique : NVIDIA GeForce RTX 4080,✅ Stockage : SSD NVMe 1 To / 2 To (PCIe Gen 4) 🔥,",
+    "SAMSUNG S23": "📌 Modèle : Samsung Galaxy S23 Ultra,✅ RAM : 8 Go / 12 Go LPDDR5X 🚀",
+    "SOURIS PULSAR": "📌 Modèle : Pulsar Xlite V2, Taux de rafraîchissement : 1000 Hz 🔄,✅ Autonomie : Jusqu’à 70 heures (X2),✅ Molette : Ultra-précise, grip texturé 🎡",
+    "pixel 8": "✅ Processeur : Google Tensor G3 ⚙️,✅ Stockage : 128 Go,✅ Vidéo : 4K à 60 FPS + Stabilisation 🎥,",
+    "XBOX series X": "📌 Catégorie : ✅ Mémoire vive : 16 Go GDDR6 🚀,✅ Lecteur Blu-ray 4K : Oui 📀,✅ Jeux en 4K natif : Oui, jusqu'à 120 FPS 🏎️",
+    "TV OLED": "✅ Taux de rafraîchissement : 120 Hz / 144 Hz (certains modèles) ⚡,✅ Système d'exploitation : webOS (LG) / Tizen (Samsung) / Google TV (Sony) 📡,🚚 Disponibilité : En stock – Livraison rapide 📦",
+    "LOOT BOX": "📌 Catégorie : Appareil photo numérique / Reflex / Hybride / Compact,Type de capteur : CMOS / BSI-CMOS / Exmor R / X-Trans 🖼️",
+    "JBL": "📌 Catégorie : Enceinte Bluetooth nomade / Haut-parleur portable,✅ Port USB-C pour recharger l’enceinte et même son téléphone 🔌📱",
+    "IPHONE 15": "📌 Catégorie : Smartphone Premium,✅ Écran Super Retina XDR 6.1,✅ Disponible en plusieurs coloris : Noir, Bleu, Vert, Jaune, Rose 🎨",
+    "CASQUE APPLE": "✅ Transducteur dynamique conçu par Apple pour un son haute fidélité 🎶,✅ Puces Apple H1 dans chaque écouteur pour une connexion ultra rapide 🚀",
+    "CLAVIER WOTTING": "✅ Format : TKL (Tenkeyless) ou Full Size selon modèle 📏, Idéal pour les jeux FPS et simulations (Forza, Flight Simulator, etc.) 🏎️✈️",
+    "WATCH CRISTY": "",
+    "CASQUE VIRTUEL": "🥽 Apple Vision Pro,✅ Design épuré et ajustable avec bandeau en tissu respirant 🎭",
+    "frigo": "En rupture nous mettrons le produit a jours sous peu désoler du désagrement .",
+    "VOITURES TELECOMMANDER": "Désoler nous cette articles en stock est déja réserver nous mettrons a jour ce produit .",
+    "PS5": "🎮 PlayStation 5 (PS5) – Console Next-Gen ,Processeur AMD Ryzen Zen 2 (8 cœurs à 3,5 GHz) 💪,✅ Stockage SSD ultra-rapide de 825 Go ",
+    "kIT": " Produits en rupture de stock nous mettrons a jours ce produit dans les plus bref délaie .",
+    "ECRAN BENQ": "✅ Résolution : Full HD (1080p) / QHD (1440p) / 4K UHD (2160p) 📺,✅ Taux de rafraîchissement : 144Hz / 165Hz / 240Hz ⚡,"
+  };
+
+  // Ajoute un événement "click" sur chaque produit
+  productImages.forEach(image => {
+    image.addEventListener('click', () => {
+      const productName = image.alt; // Récupère le nom depuis l'alt
+      const productSrc = image.src;
+
+      // Met à jour le titre et la description
+      productTitle.textContent = productName;
+      productDescription.textContent = descriptions[productName] || "Description non disponible.";
+
+      // Met à jour l'image
+      productImageContainer.innerHTML = '';
+      const newImage = document.createElement('img');
+      newImage.src = productSrc;
+      newImage.alt = productName;
+      productImageContainer.appendChild(newImage);
+    });
+  });
+</script>
+
+  
+  
+
+  <style>
+    body.dark-mode {
+      background-color: #121212;
+      color: #ffffff;
+    }
+
+    .stock-warning, .back-text {
+      transition: color 0.3s;
+    }
+
+    body.dark-mode .stock-warning, 
+    body.dark-mode .back-text {
+      color: #ffffff;
+    }
+
+    .theme-toggle {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      background: #ffffff;
+      border: none;
+      padding: 8px;
+      border-radius: 50%;
+      cursor: pointer;
+      width: 35px;
+      height: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    
+    .dark-mode .theme-toggle {
+      background: #333;
+      color: #ffffff;
+    }
+  </style>
+</body>
+</html>

